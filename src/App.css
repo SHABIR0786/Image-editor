@@ -1,38 +1,94 @@
 .App {
   text-align: center;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body{
+  padding:0px;
+  margin:0px;
+}
+header a{
+  color:white;
+  text-decoration: none;
+  padding-left:20px;
+}
+.leftone{
+margin-right: 10px;
+}
+.submit-rest{
+  display: inline;
+  float: right;
+}
+.cropper-modal{
+  opacity:0 !important;
+}
+.bottomborder{
+  margin: 0 auto;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.bottomv{
+  margin: 0 auto;
+}
+
+.bodr{
+  border: 1px dotted;
+  cursor: pointer;
+  margin:0 auto;
+  padding: 25vh;
+}
+
+@media (max-width: 444px) {
+  .bodr {
+    margin-left: -33px;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.outerdiv{
+  width: 70%;
+  margin-top: 14vh !important;    
+  margin:auto;
+}
+.rotatingbuttons{
+  margin-top:10px;
+}
+#signature-pad{
+  width:1600px;
+  height:900px;
+}
+#myCanvas{
+  border:1px solid black;
+  background-image: 'https://usersaveddata.blob.core.windows.net/test/SlideDrawing.SVG';
+}
+.tools{
+  margin:5px;
+  float:left;
+  margin-top:15px;
+}
+.tools span{
+  border:1px solid black;
+  padding:3px;
+  margin-left:5px;
+  cursor: pointer;
+}
+.tools span:hover,.tools span.active{
+color:white;
+background:black;
+}
+.navigationtools{
+  margin:5px;
+  margin-left:20%;
+  margin-top:15px;
+  float:left;
+}
+.navigationtools span{
+  border:1px solid black;
+  padding:5px;
+  margin-left:5px;
+  cursor:pointer;
+}
+.canvas-container{
+  margin:auto;
+  margin-top:25px;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#imageset{
+  
 }

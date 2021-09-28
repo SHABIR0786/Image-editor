@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { AppBar, Toolbar, IconButton, Typography } from "@mui/material";
+
+import {
+  BrowserRouter as Router, Switch, Link, Route
+} from "react-router-dom";
+
+import "./App.css";
+import ImageUpload from "./Components/PreviewImage/ImageUpload"
+import Canvas from "./Components/Canvas/Canvas"
+import FabricCanvas from "./Components/Canvas/FabricCanvas"
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <AppBar position="static">
+        <Toolbar variant="dense">
+          <Typography>
+            <Link to="/">Image Upload</Link>
+          </Typography>
+          <Typography>
+            <Link to="/canvas">Canvas</Link>
+          </Typography>
+          <Typography>
+            <Link to="/fabriccanvas">FabricCanvas</Link>
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Switch>
+        <Route exact path='/' component={ImageUpload}></Route>
+        <Route exact path='/canvas' component={Canvas}></Route>
+        <Route exact path='/fabriccanvas' component={FabricCanvas}></Route>
+      </Switch>
+    </Router>
   );
 }
 
