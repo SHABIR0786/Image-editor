@@ -1,94 +1,106 @@
 .App {
-  text-align: center;
-}
-body{
-  padding:0px;
-  margin:0px;
-}
-header a{
-  color:white;
-  text-decoration: none;
-  padding-left:20px;
-}
-.leftone{
-margin-right: 10px;
-}
-.submit-rest{
-  display: inline;
-  float: right;
-}
-.cropper-modal{
-  opacity:0 !important;
-}
-.bottomborder{
-  margin: 0 auto;
+    text-align: center;
 }
 
-.bottomv{
-  margin: 0 auto;
+body {
+    padding: 0px;
+    margin: 0px;
 }
 
-.bodr{
-  border: 1px dotted;
-  cursor: pointer;
-  margin:0 auto;
-  padding: 25vh;
+header a {
+    color: white;
+    text-decoration: none;
+    padding-left: 20px;
 }
 
-@media (max-width: 444px) {
-  .bodr {
-    margin-left: -33px;
-  }
+.leftone {
+    margin-right: 10px;
 }
 
-.outerdiv{
-  width: 70%;
-  margin-top: 14vh !important;    
-  margin:auto;
-}
-.rotatingbuttons{
-  margin-top:10px;
-}
-#signature-pad{
-  width:1600px;
-  height:900px;
-}
-#myCanvas{
-  border:1px solid black;
-  background-image: 'https://usersaveddata.blob.core.windows.net/test/SlideDrawing.SVG';
-}
-.tools{
-  margin:5px;
-  float:left;
-  margin-top:15px;
-}
-.tools span{
-  border:1px solid black;
-  padding:3px;
-  margin-left:5px;
-  cursor: pointer;
-}
-.tools span:hover,.tools span.active{
-color:white;
-background:black;
-}
-.navigationtools{
-  margin:5px;
-  margin-left:20%;
-  margin-top:15px;
-  float:left;
-}
-.navigationtools span{
-  border:1px solid black;
-  padding:5px;
-  margin-left:5px;
-  cursor:pointer;
-}
-.canvas-container{
-  margin:auto;
-  margin-top:25px;
+.submit-rest {
+    display: inline;
+    float: right;
 }
 
-#imageset{
-  
+.cropper-modal {
+    opacity: 0 !important;
 }
+
+.bottomborder {
+    margin: 0 auto;
+}
+
+.bottomv {
+    margin: 0 auto;
+}
+
+.bodr {
+    border: 1px dotted;
+    cursor: pointer;
+    padding: 10em 1em;
+    width: 100%;
+}
+
+@media screen and (max-width: 430px) {
+    .bodr {}
+}
+
+.outerdiv {
+    width: 70%;
+    margin-top: 14vh !important;
+    margin: auto;
+}
+
+.rotatingbuttons {
+    margin-top: 10px;
+}
+
+#signature-pad {
+    width: 1600px;
+    height: 900px;
+}
+
+#myCanvas {
+    border: 1px solid black;
+    background-image: 'https://usersaveddata.blob.core.windows.net/test/SlideDrawing.SVG';
+}
+
+.tools {
+    margin: 5px;
+    float: left;
+    margin-top: 15px;
+}
+
+.tools span {
+    border: 1px solid black;
+    padding: 3px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.tools span:hover,
+.tools span.active {
+    color: white;
+    background: black;
+}
+
+.navigationtools {
+    margin: 5px;
+    margin-left: 20%;
+    margin-top: 15px;
+    float: left;
+}
+
+.navigationtools span {
+    border: 1px solid black;
+    padding: 5px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.canvas-container {
+    margin: auto;
+    margin-top: 25px;
+}
+
+#imageset {}

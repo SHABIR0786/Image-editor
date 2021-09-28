@@ -75,7 +75,7 @@ export default function PreviewImage() {
     <div className="App">
      {!isEdit && isDropZone? <div className="outerdiv" {...getRootProps()}>
         <input {...getInputProps()} />
-         <div className="bodr">
+         <div className="bodr" style={{}}>
         <FontAwesomeIcon icon={faImage} />
           <p>Click or Drop Image</p></div> 
       </div>: null}
