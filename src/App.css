@@ -28,6 +28,7 @@ header a {
 
 .bottomborder {
     margin: 0 auto;
+    margin-top: -140px;
 }
 
 .bottomv {
@@ -41,9 +42,6 @@ header a {
     width: 100%;
 }
 
-@media screen and (max-width: 430px) {
-    .bodr {}
-}
 
 .outerdiv {
     width: 70%;
@@ -52,7 +50,7 @@ header a {
 }
 
 .rotatingbuttons {
-    margin-top: 10px;
+  margin-top: 120px;
 }
 
 #signature-pad {
@@ -101,6 +99,30 @@ header a {
 .canvas-container {
     margin: auto;
     margin-top: 25px;
+   
 }
 
-#imageset {}
+@media screen and (max-width: 1028px) {
+  #myCanvas {
+
+max-width: 1000px;
+width: 100% !important;
+  }
+}
+
+
+@media screen and (max-width: 1028px) {
+  .upper-canvas {
+
+max-width: 1000px;
+width: 100% !important;
+  }
+}
+
+@media screen and (max-width: 1028px) {
+  .canvas-container {
+
+max-width: 1000px;
+width: 100% !important;
+  }
+}

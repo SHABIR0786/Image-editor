@@ -75,19 +75,19 @@ export default function PreviewImage() {
     <div className="App">
      {!isEdit && isDropZone? <div className="outerdiv" {...getRootProps()}>
         <input {...getInputProps()} />
-         <div className="bodr" style={{}}>
+         <div className="bodr">
         <FontAwesomeIcon icon={faImage} />
           <p>Click or Drop Image</p></div> 
       </div>: null}
-      {!isDone  ? <div id="imageset">{images} </div> : null}
+      {!isDone  ? <div id="imageset" style={{marginLeft:"20px" , marginRight:"20px",padding: "6em 0"}}>{images} </div> : null}
      
       {isEdit ? (
         <div className="croppercode">
-            <div className="box">
+            <div className="box" >
             {isDone ? ( <img
                style={{
                 filter:childCompRef.current.state.filter,
-                transform: `rotate(${childCompRef.current?childCompRef.current.state.rotation:0}deg)` , width:"500px",height:"500px", marginTop:"30px"
+                transform: `rotate(${childCompRef.current?childCompRef.current.state.rotation:0}deg)` , maxWidth:"500px",maxHeight:"500px", padding: "10em 0",width: "100%" 
                }}
                 src={cropData}
                 alt="cropped"

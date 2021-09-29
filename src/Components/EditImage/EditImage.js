@@ -73,7 +73,7 @@ class EditImage extends Component {
   render() {
     const { rotation } = this.state;
     return (
-        <div style={{MarginTop:"30px !important"}}>
+        <div style={{padding: "8em 0 !important"}}>
           {this.props.edit && this.props.done ? (
             <Cropper
               style={{
@@ -81,8 +81,8 @@ class EditImage extends Component {
                 filter:this.state.filter,
                 marginTop: "0px",
                 transform: `rotate(${rotation}deg)`,
-                width:"500px",
-                height:"500px"
+                maxWidth:"500px",
+                maxHheight:"500px"
               }}
               strict={true}
               highlight={false}
@@ -108,8 +108,11 @@ class EditImage extends Component {
             <img
               style={{
                 transform: `rotate(${rotation}deg)`,
-       marginTop:"100px",
-                width:"500px"
+
+                      maxWidth: "500px",
+                      margin: "auto",
+                      padding: "7em 0em",
+                      width: "100%"
               }}
               src={this.props.src}
               alt="rotate"

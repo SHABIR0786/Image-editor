@@ -151,7 +151,7 @@ export default class Canvas extends Component {
     render() {
         return (
             <div>
-                <canvas id="myCanvas" height="400" width="1000">Your browser does not support canvas.</canvas>
+                <canvas id="myCanvas" height="400" max-width="1000">Your browser does not support canvas.</canvas>
                 <div className="tools">
                     <span onClick={() => this.changetool('pen')} className={this.state.tool === "pen" ? "active" : "null"}><FontAwesomeIcon icon={faPencilAlt} /></span>
                     <span onClick={() => this.changetool('eraser')} className={this.state.tool === "eraser" ? "active" : "null"}><FontAwesomeIcon icon={faEraser} /></span>
