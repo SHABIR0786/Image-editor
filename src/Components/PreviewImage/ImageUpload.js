@@ -14,13 +14,15 @@ export default function PreviewImage() {
   const [isDropZone, setDropZone] = useState(true);
   const [isDone, setDone] = useState(false);
   const [cropData, setCropData] = useState("#");
-  const [cropper, setCropper] = useState(null);
   const childCompRef = React.useRef(null);
-  const imageRef = useRef(null);
-  const getCropData = () => {
-    if (typeof cropper !== "undefined") {
-      setCropData(cropper.getCroppedCanvas().toDataURL());
-    }
+  const getCropData = (blob) => {
+    var reader = new FileReader();
+reader.readAsDataURL(blob); 
+reader.onloadend = function() {
+  var base64data = reader.result;                
+  setCropData(base64data);
+}
+
   };
   const { getRootProps, getInputProps } = useDropzone({
     accept: "image/*",
@@ -41,27 +43,24 @@ export default function PreviewImage() {
 
     <div key={file.name}>
       <div>
-        <EditImage
+       <EditImage
           src={file.preview}
           ref={childCompRef}
           edit={isEdit}
           done={!isDone}
           setDone={setDone}
           getCropData={getCropData}
-          cropper={cropper}
-          setCropper={setCropper}
-          imageRef={imageRef}
         />
       </div>
       <Stack spacing={2} direction="row">
         <div className="bottomborder">
           {!isEdit ? (
-            <Button onClick={() => setEdit(true)} Center variant="outlined"   style={{  marginRight: "40px" }} >
+            <Button onClick={() => setEdit(true)} variant="outlined"   style={{  marginRight: "40px" }} >
               Edit
             </Button>
           ) : null}
           {!isEdit ? (
-            <Button onClick={clickHandler} Center variant="outlined">
+            <Button onClick={clickHandler} variant="outlined">
               Submit
             </Button>
           ) : null}
@@ -79,15 +78,15 @@ export default function PreviewImage() {
         <FontAwesomeIcon icon={faImage} />
           <p>Click or Drop Image</p></div> 
       </div>: null}
-      {!isDone  ? <div id="imageset" style={{marginLeft:"20px" , marginRight:"20px",padding: "6em 0"}}>{images} </div> : null}
+      {!isDone  ? <div id="imageset" style={{marginLeft:"20px" , marginRight:"20px"}}>{images} </div> : null}
      
       {isEdit ? (
         <div className="croppercode">
             <div className="box" >
             {isDone ? ( <img
                style={{
-                filter:childCompRef.current.state.filter,
-                transform: `rotate(${childCompRef.current?childCompRef.current.state.rotation:0}deg)` , maxWidth:"500px",maxHeight:"500px", padding: "10em 0",width: "100%" 
+                
+                 maxWidth:"500px",maxHeight:"500px", padding: "2em 0",width: "100%" 
                }}
                 src={cropData}
                 alt="cropped"

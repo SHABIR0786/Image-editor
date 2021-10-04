@@ -28,7 +28,7 @@ header a {
 
 .bottomborder {
     margin: 0 auto;
-    margin-top: -140px;
+    margin-top: -20px;
 }
 
 .bottomv {
@@ -50,7 +50,7 @@ header a {
 }
 
 .rotatingbuttons {
-  margin-top: 120px;
+  margin-top: 15px;
 }
 
 #signature-pad {
@@ -125,4 +125,7 @@ width: 100% !important;
 max-width: 1000px;
 width: 100% !important;
   }
+}
+#loader{
+    margin:0 auto;
 }

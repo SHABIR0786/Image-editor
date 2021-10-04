@@ -11,9 +11,9 @@ export default class Canvas extends Component {
         text: "",
         canvas: null,
         EraserBrush: null,
-        slides:[],
-        currentSlide:{},
-        currentIndex:0
+        slides: [],
+        currentSlide: {},
+        currentIndex: 0
     }
     constructor(props) {
         super(props)
@@ -22,9 +22,9 @@ export default class Canvas extends Component {
             text: "",
             canvas: null,
             EraserBrush: null,
-            slides:[],
-            currentSlide:{},
-            currentIndex:0
+            slides: [],
+            currentSlide: {},
+            currentIndex: 0
         }
         this.addCircle = this.addCircle.bind(this);
         this.addPencil = this.addPencil.bind(this);
@@ -39,33 +39,33 @@ export default class Canvas extends Component {
         this.getNextSlide = this.getNextSlide.bind(this);
         this.deleteCurrentSlide = this.deleteCurrentSlide.bind(this);
     }
-    async deleteCurrentSlide(){
-        if(this.state.slides.length > 0){
+    async deleteCurrentSlide() {
+        if (this.state.slides.length > 0) {
             var slides = this.state.slides;
-            slides.splice(this.state.currentIndex,1);
-        await this.setState({slides:slides});
-        await this.setState({currentIndex:this.state.currentIndex-1});
-        await this.state.canvas.clear();
-        await this.state.canvas.loadFromJSON(this.state.slides[this.state.currentIndex]);
-        }else{
-        await this.state.canvas.clear();
+            slides.splice(this.state.currentIndex, 1);
+            await this.setState({ slides: slides });
+            await this.setState({ currentIndex: this.state.currentIndex - 1 });
+            await this.state.canvas.clear();
+            await this.state.canvas.loadFromJSON(this.state.slides[this.state.currentIndex]);
+        } else {
+            await this.state.canvas.clear();
         }
     }
 
-    async getNextSlide(){
-        if((this.state.currentIndex+1) < this.state.slides.length){
-           await this.saveSlide();
-           await this.setState({currentIndex:this.state.currentIndex+1});
-           await this.setState({currentSlide:this.state.slides[this.state.currentIndex]});
-           await this.state.canvas.clear();
-           await this.state.canvas.loadFromJSON(this.state.slides[this.state.currentIndex]);
-           await this.saveSlide();
+    async getNextSlide() {
+        if ((this.state.currentIndex + 1) < this.state.slides.length) {
+            await this.saveSlide();
+            await this.setState({ currentIndex: this.state.currentIndex + 1 });
+            await this.setState({ currentSlide: this.state.slides[this.state.currentIndex] });
+            await this.state.canvas.clear();
+            await this.state.canvas.loadFromJSON(this.state.slides[this.state.currentIndex]);
+            await this.saveSlide();
         }
     }
-   async getPreviousSlide() {
-        if(this.state.currentIndex > 0){
+    async getPreviousSlide() {
+        if (this.state.currentIndex > 0) {
             await this.saveSlide();
-            await this.setState({currentIndex:this.state.currentIndex - 1});
+            await this.setState({ currentIndex: this.state.currentIndex - 1 });
             await this.state.canvas.clear();
             await this.state.canvas.loadFromJSON(this.state.slides[this.state.currentIndex]);
             await this.saveSlide();
@@ -73,23 +73,23 @@ export default class Canvas extends Component {
     }
 
     async saveSlide() {
-        this.setState({currentSlide:this.state.canvas.toJSON()});
-        if(this.state.slides.length > 0) {
+        this.setState({ currentSlide: this.state.canvas.toJSON() });
+        if (this.state.slides.length > 0) {
             const myNewArray = Object.assign([...this.state.slides], {
                 [this.state.currentIndex]: this.state.canvas.toJSON()
             });
-            await this.setState({slides : myNewArray });
-        //   await this.state.slides[this.state.currentIndex] = this.state.canvas.toJSON();
+            await this.setState({ slides: myNewArray });
+            //   await this.state.slides[this.state.currentIndex] = this.state.canvas.toJSON();
         } else {
-           await this.state.slides.push(this.state.canvas.toJSON());
+            await this.state.slides.push(this.state.canvas.toJSON());
         }
     }
-  async addNewSlide(){
-       await this.saveSlide();
-       await this.setState({currentIndex:this.state.slides.length});
-       await this.state.canvas.clear();
-       await this.state.slides.push(this.state.canvas.toJSON());
-       await this.saveSlide();
+    async addNewSlide() {
+        await this.saveSlide();
+        await this.setState({ currentIndex: this.state.slides.length });
+        await this.state.canvas.clear();
+        await this.state.slides.push(this.state.canvas.toJSON());
+        await this.saveSlide();
     }
     addMove() {
         this.setState({ tool: 'move' });
@@ -147,7 +147,7 @@ export default class Canvas extends Component {
     }
     componentDidMount() {
         const Instance = this;
-        this.setState({ canvas: new fabric.Canvas('myCanvas') },()=>{
+        this.setState({ canvas: new fabric.Canvas('myCanvas') }, () => {
             this.saveSlide();
         });
         /*
@@ -155,6 +155,9 @@ export default class Canvas extends Component {
   *
   * Made it so that the bound is calculated on the original only
   */
+
+
+
         const ErasedGroup = fabric.util.createClass(fabric.Group, {
             original: null,
             erasedPath: null,
@@ -197,7 +200,6 @@ export default class Canvas extends Component {
              * and add it to the fabric canvas.
              */
             _finalizeAndAddPath: function () {
-                console.log(Instance.state);
                 var ctx = Instance.state.canvas.contextTop;
                 ctx.closePath();
                 if (this.decimate) {
@@ -258,39 +260,49 @@ export default class Canvas extends Component {
                 }
 
                 Instance.state.canvas.clearContext(Instance.state.canvas.contextTop);
+                this._resetShadow();
                 Instance.state.canvas.renderAll();
-                //   Instance.state.canvas._resetShadow();
             },
         });
+
+// const EraserBrush = fabric.util.createClass(fabric.PencilBrush, {
+//     _finalizeAndAddPath: function () {
+//     var ctx = Instance.state.canvas.contextTop;
+//     Instance.state.canvas.isDrawingMode = 1;
+//     Instance.state.canvas.freeDrawingBrush.color = "white";
+//     Instance.state.canvas.freeDrawingBrush.width = 10;
+//     Instance.state.canvas.freeDrawingBrush.globalCompositeOperation = 'destination-out';
+//     Instance.state.canvas.freeDrawingBrush.id = 'erasure';
+//     ctx.beginPath(); // the context of canvas
+//     Instance.state.canvas.renderAll();
+//     }
+//     });
         this.setState({ EraserBrush: EraserBrush });
-        // setInterval(function(){
-        //   Instance.saveSlide();
-        // },2000);
     }
 
     render() {
         return (
             <div className="">
                 <canvas id="myCanvas" height="400" width="1000">Your browser does not support canvas.</canvas>
-                <div style={{maxWidth:'1000px',margin:'auto'}}>
-                <div className="tools">
-                    <span onClick={this.addMove} className={this.state.tool === "move" ? "active" : "null"}><FontAwesomeIcon icon={faArrowsAlt} /></span>
-                    <span onClick={this.addPencil} className={this.state.tool === "pen" ? "active" : "null"}><FontAwesomeIcon icon={faPencilAlt} /></span>
-                    <span onClick={this.addEraser} className={this.state.tool === "eraser" ? "active" : "null"}><FontAwesomeIcon icon={faEraser} /></span>
-                    <span onClick={this.addCircle} className={this.state.tool === "circle" ? "active" : "null"}><FontAwesomeIcon icon={faDotCircle} /></span>
-                    <span onClick={this.addText} className={this.state.tool === "font" ? "active" : "null"}><FontAwesomeIcon icon={faFont} /></span>
-                    {this.state.tool === "font" ? <div><TextField id="standard-basic" value={this.state.text} onChange={this.TextChanged} label="Enter Text" variant="standard" />
-                    <Button variant="contained" onClick={this.saveText}>Save</Button>
-                </div> : null}
-                </div>
-                <div className="navigationtools">
-                <span onClick={this.addNewSlide} className={this.state.tool === "font" ? "active" : "null"}><FontAwesomeIcon icon={faPlus} /></span>
-                <span onClick={this.getPreviousSlide} className={this.state.tool === "font" ? "active" : "null"}><FontAwesomeIcon icon={faArrowLeft} /></span>
-                <span onClick={this.addText} className={this.state.tool === "font" ? "active" : "null"}>{this.state.currentIndex+1 }/{this.state.slides.length}</span>
-                <span onClick={this.getNextSlide} className={this.state.tool === "font" ? "active" : "null"}><FontAwesomeIcon icon={faArrowRight} /></span>
-                <span onClick={this.deleteCurrentSlide} className={this.state.tool === "font" ? "active" : "null"}><FontAwesomeIcon icon={faTrashAlt} /></span>
-                </div>
-                <Menu canvas={this.state.canvas} style={{ 'float': 'right' }}></Menu>
+                <div style={{ maxWidth: '1000px', margin: 'auto' }}>
+                    <div className="tools">
+                        <span onClick={this.addMove} className={this.state.tool === "move" ? "active" : "null"}><FontAwesomeIcon icon={faArrowsAlt} /></span>
+                        <span onClick={this.addPencil} className={this.state.tool === "pen" ? "active" : "null"}><FontAwesomeIcon icon={faPencilAlt} /></span>
+                        <span onClick={this.addEraser} className={this.state.tool === "eraser" ? "active" : "null"}><FontAwesomeIcon icon={faEraser} /></span>
+                        <span onClick={this.addCircle} className={this.state.tool === "circle" ? "active" : "null"}><FontAwesomeIcon icon={faDotCircle} /></span>
+                        <span onClick={this.addText} className={this.state.tool === "font" ? "active" : "null"}><FontAwesomeIcon icon={faFont} /></span>
+                        {this.state.tool === "font" ? <div><TextField id="standard-basic" value={this.state.text} onChange={this.TextChanged} label="Enter Text" variant="standard" />
+                            <Button variant="contained" onClick={this.saveText}>Save</Button>
+                        </div> : null}
+                    </div>
+                    <div className="navigationtools">
+                        <span onClick={this.addNewSlide} className={this.state.tool === "font" ? "active" : "null"}><FontAwesomeIcon icon={faPlus} /></span>
+                        <span onClick={this.getPreviousSlide} className={this.state.tool === "font" ? "active" : "null"}><FontAwesomeIcon icon={faArrowLeft} /></span>
+                        <span onClick={this.addText} className={this.state.tool === "font" ? "active" : "null"}>{this.state.currentIndex + 1}/{this.state.slides.length}</span>
+                        <span onClick={this.getNextSlide} className={this.state.tool === "font" ? "active" : "null"}><FontAwesomeIcon icon={faArrowRight} /></span>
+                        <span onClick={this.deleteCurrentSlide} className={this.state.tool === "font" ? "active" : "null"}><FontAwesomeIcon icon={faTrashAlt} /></span>
+                    </div>
+                    <Menu canvas={this.state.canvas} style={{ 'float': 'right' }}></Menu>
                 </div>
             </div>
         );

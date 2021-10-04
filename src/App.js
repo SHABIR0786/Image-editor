@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Toolbar, IconButton, Typography } from "@mui/material";
+import { AppBar, Toolbar, Typography } from "@mui/material";
 
 import {
   BrowserRouter as Router, Switch, Link, Route
@@ -7,7 +7,6 @@ import {
 
 import "./App.css";
 import ImageUpload from "./Components/PreviewImage/ImageUpload"
-import Canvas from "./Components/Canvas/Canvas"
 import FabricCanvas from "./Components/Canvas/FabricCanvas"
 
 
@@ -22,15 +21,11 @@ function App() {
           <Typography>
             <Link to="/canvas">Canvas</Link>
           </Typography>
-          <Typography>
-            <Link to="/fabriccanvas">FabricCanvas</Link>
-          </Typography>
         </Toolbar>
       </AppBar>
       <Switch>
         <Route exact path='/' component={ImageUpload}></Route>
-        <Route exact path='/canvas' component={Canvas}></Route>
-        <Route exact path='/fabriccanvas' component={FabricCanvas}></Route>
+        <Route exact path='/canvas' component={FabricCanvas}></Route>
       </Switch>
     </Router>
   );
