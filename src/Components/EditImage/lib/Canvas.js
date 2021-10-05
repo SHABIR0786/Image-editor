@@ -6,15 +6,13 @@ import React, {
     useState,
     Fragment
   } from 'react'
-import ReactLoading from 'react-loading';
+  import ReactLoading from 'react-loading';
   import { useOpenCv } from 'opencv-react'
   import T from 'prop-types'
-  
   import { calcDims, readFile } from './utils'
   import CropPoints from './CropPoints'
   import { applyFilter, transform, EnhanceImage } from './imgManipulation'
   import CropPointsDelimiters from './CropPointsDelimiters'
-  
   const buildImgContainerStyle = (previewDims) => ({
     width: previewDims.width,
     height: previewDims.height
@@ -196,49 +194,90 @@ import ReactLoading from 'react-loading';
       src.delete()
       dst.delete()
     }
-  
     const detectContours = () => {
-      const dst = cv.imread(canvasRef.current)
-      const ksize = new cv.Size(5, 5)
-      // convert the image to grayscale, blur it, and find edges in the image
-      cv.cvtColor(dst, dst, cv.COLOR_RGBA2GRAY, 0)
-      cv.GaussianBlur(dst, dst, ksize, 0, 0, cv.BORDER_DEFAULT)
-      cv.Canny(dst, dst, 100, 200)
-      // find contours
-      cv.threshold(dst, dst, 120, 200, cv.THRESH_BINARY)
+      let foundContour = null;
+      let src = cv.imread(previewCanvasRef.current);
+      let dst = cv.Mat.zeros(src.rows, src.cols, cv.CV_8UC3);
+      let finaldst = cv.Mat.zeros(src.rows, src.cols, cv.CV_8UC3);
+      cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY, 0);
+      let ksize = new cv.Size(5, 5);
+      cv.GaussianBlur(dst, dst, ksize, 0, 0, cv.BORDER_DEFAULT);
+      cv.Canny(dst, dst, 100, 200, 3, false); // You can try more different parameters
+      cv.threshold(dst, dst, 100, 200,cv.THRESH_BINARY);
       let MN = cv.Mat.ones(5, 5, cv.CV_8U);
       let anchor = new cv.Point(-1, -1);
       // You can try more different parameters
       cv.dilate(dst, dst, MN, anchor, 1, cv.BORDER_CONSTANT, cv.morphologyDefaultBorderValue());
-      const contours = new cv.MatVector()
-      const hierarchy = new cv.Mat()
-      cv.findContours(
-        dst,
-        contours,
-        hierarchy,
-        cv.RETR_CCOMP,
-        cv.CHAIN_APPROX_SIMPLE
-      )
-      const rect = cv.boundingRect(dst)
-      dst.delete()
-      hierarchy.delete()
-      contours.delete()
-      // transform the rectangle into a set of points
-      Object.keys(rect).forEach((key) => {
-        rect[key] = rect[key] * imageResizeRatio
-      })
+      let contours = new cv.MatVector();
+      let hierarchy = new cv.Mat();
+      // let hull = new cv.MatVector();
+      cv.findContours(dst, contours, hierarchy, cv.RETR_CCOMP, cv.CHAIN_APPROX_SIMPLE);
+      //Get area for all contours so we can find the biggest
+      let sortableContours = [];
+      for (let i = 0; i < contours.size(); i++) {
+        let cnt = contours.get(i);
+        let area = cv.contourArea(cnt, false);
+        let perim = cv.arcLength(cnt, false);
+        sortableContours.push({ areaSize: area, perimiterSize: perim, contour: cnt });
+      }
+      //Sort 'em
+      sortableContours = sortableContours.sort((item1, item2) => { return (item1.areaSize > item2.areaSize) ? -1 : (item1.areaSize < item2.areaSize) ? 1 : 0; }).slice(0, 5);
   
+      //Ensure the top area contour has 4 corners (NOTE: This is not a perfect science and likely needs more attention)
+      let approx = new cv.Mat();
+      cv.approxPolyDP(sortableContours[0].contour, approx, .05 * sortableContours[0].perimiterSize, true);
+      if (approx.rows == 4) {
+        foundContour = approx;
+      //Find the corners
+      //foundCountour has 2 channels (seemingly x/y), has a depth of 4, and a type of 12.  Seems to show it's a CV_32S "type", so the valid data is in data32S??
+      let corner1 = new cv.Point(foundContour.data32S[0], foundContour.data32S[1]);
+      let corner2 = new cv.Point(foundContour.data32S[2], foundContour.data32S[3]);
+      let corner3 = new cv.Point(foundContour.data32S[4], foundContour.data32S[5]);
+      let corner4 = new cv.Point(foundContour.data32S[6], foundContour.data32S[7]);
+      //Order the corners
+      let cornerArray = [{ corner: corner1 }, { corner: corner2 }, { corner: corner3 }, { corner: corner4 }];
+      //Sort by Y position (to get top-down)
+      cornerArray.sort((item1, item2) => { return (item1.corner.y < item2.corner.y) ? -1 : (item1.corner.y > item2.corner.y) ? 1 : 0; }).slice(0, 5);
+
+      //Determine left/right based on x position of top and bottom 2
+      let tl = cornerArray[0].corner.x < cornerArray[1].corner.x ? cornerArray[0] : cornerArray[1];
+      let tr = cornerArray[0].corner.x > cornerArray[1].corner.x ? cornerArray[0] : cornerArray[1];
+      let bl = cornerArray[2].corner.x < cornerArray[3].corner.x ? cornerArray[2] : cornerArray[3];
+      let br = cornerArray[2].corner.x > cornerArray[3].corner.x ? cornerArray[2] : cornerArray[3];
       const contourCoordinates = {
-        'left-top': { x: rect.x, y: rect.y },
-        'right-top': { x: rect.x + rect.width, y: rect.y },
+        'left-top': { x: tl.corner.x, y: tl.corner.y },
+        'right-top': { x: tr.corner.x, y: tr.corner.y },
         'right-bottom': {
-          x: rect.x + rect.width,
-          y: rect.y + rect.height
+          x: br.corner.x,
+          y: br.corner.y
         },
-        'left-bottom': { x: rect.x, y: rect.y + rect.height }
+        'left-bottom': { x: bl.corner.x, y: bl.corner.y }
+      }
+      setCropPoints(contourCoordinates)
+      }
+      else {
+        const rect = cv.boundingRect(dst)
+        dst.delete()
+        hierarchy.delete()
+        contours.delete()
+  
+        // transform the rectangle into a set of points
+        Object.keys(rect).forEach((key) => {
+          rect[key] = rect[key] * imageResizeRatio
+        })
+    
+        const contourCoordinates = {
+          'left-top': { x: rect.x, y: rect.y },
+          'right-top': { x: rect.x + rect.width, y: rect.y },
+          'right-bottom': {
+            x: rect.x + rect.width,
+            y: rect.y + rect.height
+          },
+          'left-bottom': { x: rect.x, y: rect.y + rect.height }
+        }
+      setCropPoints(contourCoordinates)
       }
   
-      setCropPoints(contourCoordinates)
     }
   
     const clearMagnifier = () => {
@@ -362,9 +401,9 @@ import ReactLoading from 'react-loading';
       </div>
     )
   }
-  
+
   export default Canvas
-  
+
   Canvas.propTypes = {
     image: T.object.isRequired,
     onDragStop: T.func,

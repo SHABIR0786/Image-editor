@@ -86,7 +86,7 @@ class EditImage extends Component {
           ) : (
             <img style={{
                 transform: `rotate(${rotation}deg)`,
-                      maxWidth: "500px",
+                      maxWidth: "400px",
                       margin: "auto",
                       padding: "2em 0em",
                       width: "100%"
